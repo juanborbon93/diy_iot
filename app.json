@@ -1,0 +1,21 @@
+{
+    "name": "diy iot server",
+    "description": "A web application that lets you connect your own DIY IOT devices to post time series data. It also has an interactive dashboard where you can view your device feeds.",
+    "repository": "https://github.com/juanborbon93/diy_iot",
+    "logo": "https://github.com/juanborbon93/diy_iot/blob/master/docs/app_logo.png?raw=true",
+    "keywords": ["python", "iot"],
+    "env":{
+        "API_KEY":{
+            "description":"API key used by app admin",
+            "value":"your_api_key"
+        }
+    },
+    "addons":[
+        {
+            "plan": "heroku-postgresql",
+            "options": {
+                "version": "9.5"
+            }
+        }
+    ]
+  }
