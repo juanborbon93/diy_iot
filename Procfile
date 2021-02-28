@@ -1,1 +1,1 @@
-web: uvicorn diy_iot:app --host=0.0.0.0 --port=${PORT:-5000}
+web: uvicorn diy_iot:server --host=0.0.0.0 --port=${PORT:-5000}
