@@ -7,14 +7,13 @@ db = Database()
 
 
 class Device(db.Entity):
-    id = PrimaryKey(int, auto=True)
+    name = PrimaryKey(str)
     data_channels = Set('DataChannel')
-    name = Required(str)
 
 
 class ChannelEntry(db.Entity):
     id = PrimaryKey(int, auto=True)
-    time = Required(datetime)
+    time = Required(datetime,default=lambda:datetime.utcnow())
     numeric_value = Optional(float)
     metadata = Optional(Json)
     data_channel = Required('DataChannel')
@@ -29,11 +28,14 @@ class DataChannel(db.Entity):
 
 
 class DataType(db.Entity):
-    id = PrimaryKey(str, auto=True)
+    id = PrimaryKey(str)
     data_channels = Set(DataChannel)
     metadata_config = Optional(Json)
 
 
-
-db.bind(provider='postgres', dsn=os.environ['DATABASE_URL'])
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    db.bind(provider='postgres', dsn=database_url)
+else: 
+    db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
 db.generate_mapping(create_tables=True)

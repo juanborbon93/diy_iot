@@ -1,3 +1,4 @@
 tests/*
 *.pyc
 .vscode/*
+database.sqlite
