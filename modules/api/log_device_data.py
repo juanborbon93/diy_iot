@@ -11,16 +11,16 @@ class ChannelData(BaseModel):
     metadata:Dict=None
     time:datetime=None
 class Model(BaseModel):
-    device_id:int
+    device_name:str
     data:List[ChannelData]
     
 def fun(body:Model,api_key:APIKey=Depends(get_api_key)):
     with db_session:
-        device = db.Device.get(id=body.device_id)
+        device = db.Device.get(name=body.device_name)
         if device is None:
             raise HTTPException(400,f"No device in database with id of {body.device_id}")
         for channel_entry in body.data:
-            channel = db.DataChannel.get(device=device,name=channel_entry.name)
+            channel = db.DataChannel.get(device=device,name=channel_entry.channel)
             if channel is None:
                 raise HTTPException(400,f"No channel {channel_entry.name} for device {device.id}")
             if channel_entry.time is None:
@@ -28,7 +28,8 @@ def fun(body:Model,api_key:APIKey=Depends(get_api_key)):
             new_entry = db.ChannelEntry(
                 time=channel_entry.time,
                 numeric_value=channel_entry.numeric_value,
-                metadata=channel_entry.metadata,
                 data_channel=channel
             )
-            db.commit()
+            if channel_entry.metadata:
+                new_entry.metadata = channel_entry.metadata
+        db.commit()

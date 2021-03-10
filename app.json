@@ -8,6 +8,12 @@
         "API_KEY":{
             "description":"API key used by app admin",
             "value":"your_api_key"
+        },
+        "ADMIN_USERNAME":{
+            "description":"Username for admin dashboard"
+        },
+        "ADMIN_PASSWORD":{
+            "description":"Password for admin dashboard"
         }
     },
     "addons":[

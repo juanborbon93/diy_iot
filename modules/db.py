@@ -24,13 +24,13 @@ class DataChannel(db.Entity):
     name = Required(str)
     device = Required(Device)
     device_time_entrys = Set(ChannelEntry)
-    data_type = Required('DataType')
+    data_type = Required(str)
 
 
-class DataType(db.Entity):
-    id = PrimaryKey(str)
-    data_channels = Set(DataChannel)
-    metadata_config = Optional(Json)
+# class DataType(db.Entity):
+#     id = PrimaryKey(str)
+#     data_channels = Set(DataChannel)
+#     metadata_config = Optional(Json)
 
 
 database_url = os.environ.get('DATABASE_URL')

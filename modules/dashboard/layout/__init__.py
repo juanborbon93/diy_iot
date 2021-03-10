@@ -27,7 +27,8 @@ def show():
                                     label="Device Feeds",
                                     children = [
                                         device_dropdown(),
-                                        dcc.Loading(id="device-feeds",fullscreen=True)
+                                        html.Div(id="device-feeds"),
+                                        dcc.Interval(id="device-refresh-interval",interval=5000)
                                     ]
                                 ),
                                 dcc.Tab(

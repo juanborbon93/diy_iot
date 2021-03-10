@@ -7,17 +7,18 @@ from dash.dependencies import Input, Output,State
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import json
+from ...channel_types import channel_type_dict
+import logging
 
 class ChannelModel(BaseModel):
     name:str
     data_type:str
     @validator('data_type')
-    @db_session
     def validate_data_type(cls,v):
-        data_type_match = db.DataType.get(id=v)
-        if data_type_match is None:
-            raise ValueError(f"{v} is not a supported datatype")
+        if v not in channel_type_dict:
+            raise ValueError(f"data_type {v} not valid. must be one of {channel_type_dict.keys()}")
         return v
+
 
 class DeviceConfig(BaseModel):
     name:str
@@ -34,18 +35,14 @@ class DeviceConfig(BaseModel):
     def validate_channels(cls,v):
         if len(v)==0:
             raise ValueError("Device must have at least one channel definition")
+        return v
     @db_session
     def register_device(self):
         new_device = db.Device(name=self.name)
-        db.commit()
         for channel in self.channels:
-            new_channel = db.DataChannel(name=channel.name,device=new_device,data_type=db.DataType[channel.data_type])
-            db.commit()
+            new_channel = db.DataChannel(name=channel.name,device=new_device,data_type=channel.data_type)
+        db.commit()
         
-
-
-    
-
 
 default_config = '''{
     "name":"device_name",
@@ -93,6 +90,7 @@ def make_new_device(n_clicks,config_str):
             device_config.register_device()
             message = f"Device {device_config.name} has been registered"
         except Exception as e:
+            logging.exception(f"Invalid config: {e}")
             message = f"Invalid config: {e}"
     return message
         

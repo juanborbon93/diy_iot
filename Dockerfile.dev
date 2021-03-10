@@ -1,0 +1,7 @@
+FROM continuumio/miniconda3
+RUN apt-get update
+COPY conda-environment.yml ./
+RUN conda env create -f conda-environment.yml
+RUN echo "source activate diy_iot" > ~/.bashrc
+ENV PATH /opt/conda/envs/diy_iot/bin:$PATH
+EXPOSE 5000

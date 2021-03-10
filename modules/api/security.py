@@ -2,7 +2,7 @@ from fastapi.security.api_key import  APIKeyHeader, APIKey
 from fastapi import HTTPException,Security
 import os
 
-API_KEY = os.environ.get("API_KEY","test")
+API_KEY = os.environ.get("API_KEY")
 API_KEY_NAME = "api_key"
 
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
